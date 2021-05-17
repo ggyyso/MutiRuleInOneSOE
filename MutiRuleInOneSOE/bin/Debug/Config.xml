@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ESRI.Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.esri.com/Desktop/AddIns">
+  <Name>ExportMapSOE</Name>
+  <AddInID>5425566f-a6be-46a8-bdb8-9df979a71dd4</AddInID>
+  <Description>Insert SOE package description here</Description>
+  <Version>1.0</Version>
+  <Author>gisxy</Author>
+  <Company>Insert Company Name Here</Company>
+  <Date>2016-04-12T21:41:49</Date>
+  <Targets>
+    <Target name="Server" version="10.3" />
+  </Targets>
+  <AddIn language="CLR" library="MultiRuleInOneSOE.dll" namespace="MultiRuleInOneSOE">
+    <ServerObjectType>
+      <Name>MapServer</Name>
+      <ExtensionTypes>
+        <ExtensionType id="MultiRuleInOneSOE.MultiRuleInOneSOE" library="MultiRuleInOneSOE.dll" class="MultiRuleInOneSOE.MultiRuleInOneSOE">
+          <Name>MultiRuleInOneSOE</Name>
+          <DisplayName>MultiRuleInOneSOE</DisplayName>
+          <Description>多规合一项目控制线检测功能ArcGIS服务扩展</Description>
+          <Properties />
+          <Resources />
+          <Info>
+            <DefaultWebCapabilities>空间关系运算、要素相关操作、项目与控制线线检测结果、检测报告Word/pdf生成</DefaultWebCapabilities>
+            <AllWebCapabilities>针对多规合一项目控制线检测功能ArcGIS服务扩展</AllWebCapabilities>
+            <SupportsREST>true</SupportsREST>
+            <SupportsSOAP>false</SupportsSOAP>
+            <hasManagerPropertiesConfigurationPane>false</hasManagerPropertiesConfigurationPane>
+            <SupportsInterceptor>false</SupportsInterceptor>
+          </Info>
+        </ExtensionType>
+      </ExtensionTypes>
+    </ServerObjectType>
+  </AddIn>
+</ESRI.Configuration>

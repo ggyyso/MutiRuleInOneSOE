@@ -1,0 +1,13 @@
+c:\users\gisxy\documents\visual studio 2013\Projects\ExportMapSOE\ExportMapSOE\bin\Debug\ExportMapSOE.dll
+c:\users\gisxy\documents\visual studio 2013\Projects\ExportMapSOE\ExportMapSOE\bin\Debug\ExportMapSOE.pdb
+c:\users\gisxy\documents\visual studio 2013\Projects\ExportMapSOE\ExportMapSOE\obj\Debug\ExportMapSOE.dll
+c:\users\gisxy\documents\visual studio 2013\Projects\ExportMapSOE\ExportMapSOE\obj\Debug\ExportMapSOE.pdb
+C:\Users\gisxy\Documents\Visual Studio 2013\Projects\ExportMapSOE\ExportMapSOE\bin\Debug\Aspose.Words.dll
+C:\Users\gisxy\Documents\Visual Studio 2013\Projects\ExportMapSOE\ExportMapSOE\obj\Debug\ExportMapSOE.csprojResolveAssemblyReference.cache
+C:\Users\gisxy\Documents\Visual Studio 2013\Projects\ExportMapSOE\ExportMapSOE\bin\Debug\ExportMapSOE.soe
+C:\Users\向阳\Desktop\多规合一\多规合一项目\服务\ExportMapSOE160416\ExportMapSOE\bin\Debug\ExportMapSOE.dll
+C:\Users\向阳\Desktop\多规合一\多规合一项目\服务\ExportMapSOE160416\ExportMapSOE\bin\Debug\ExportMapSOE.pdb
+C:\Users\向阳\Desktop\多规合一\多规合一项目\服务\ExportMapSOE160416\ExportMapSOE\obj\Debug\ExportMapSOE.csprojResolveAssemblyReference.cache
+C:\Users\向阳\Desktop\多规合一\多规合一项目\服务\ExportMapSOE160416\ExportMapSOE\obj\Debug\ExportMapSOE.dll
+C:\Users\向阳\Desktop\多规合一\多规合一项目\服务\ExportMapSOE160416\ExportMapSOE\obj\Debug\ExportMapSOE.pdb
+C:\Users\向阳\Desktop\多规合一\多规合一项目\服务\ExportMapSOE160416\ExportMapSOE\bin\Debug\ExportMapSOE.soe
