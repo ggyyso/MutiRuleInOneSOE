@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -275,18 +275,19 @@ namespace MultiRuleInOneSOE
             //结果集合
             List<JsonObject> resultArray = new List<JsonObject>();
 
-            //计算输入面要素面积
-            double prjArea = 0;
 
 
-            List<Dictionary<string, object>> paramDicList = new List<Dictionary<string, object>>();
 
-            List<Dictionary<string, object>> dikuaiAreaList = new List<Dictionary<string, object>>();
+            List<SortedDictionary<string, object>> paramDicList = new List<SortedDictionary<string, object>>();
+
+            List<SortedDictionary<string, object>> dikuaiAreaList = new List<SortedDictionary<string, object>>();
 
             for (int i = 0; i < featuresObj.Length; i++)
             {
-                Dictionary<string, object> geoDic = new Dictionary<string, object>();
-                Dictionary<string, object> dikuaiArea = new Dictionary<string, object>();
+                //计算输入面要素面积
+                double prjArea = 0;
+                SortedDictionary<string, object> geoDic = new SortedDictionary<string, object>();
+                SortedDictionary<string, object> dikuaiArea = new SortedDictionary<string, object>();
 
                 JsonObject fsJson = (JsonObject)featuresObj[i];
                 JsonObject geo;
@@ -330,14 +331,14 @@ namespace MultiRuleInOneSOE
             }
 
             //返回结果
-            Dictionary<string, resultClass> returnDic = new Dictionary<string, resultClass>();
+            SortedDictionary<string, resultClass> returnDic = new SortedDictionary<string, resultClass>();
 
             Utils.picStr = "";
 
             tbl.Rows.Clear();
 
 
-            List<Dictionary<string, Dictionary<string, double>>> LayerStaticDictList = new List<Dictionary<string, Dictionary<string, double>>>();
+            List<SortedDictionary<string, SortedDictionary<string, double>>> LayerStaticDictList = new List<SortedDictionary<string, SortedDictionary<string, double>>>();
             //遍历图层
             for (int i = 0; i < layers.Length; i++)
             {
@@ -351,8 +352,8 @@ namespace MultiRuleInOneSOE
                 spatialFilter.GeometryField = kzxFs.ShapeFieldName;
                 spatialFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelIntersects;
                 //遍历地块,进行空间检索，将检索结果按地块存储。
-                Dictionary<string, List<IFeature>> searchFeatureDic = new Dictionary<string, List<IFeature>>();
-                foreach (Dictionary<string, object> geoDic in paramDicList)
+                SortedDictionary<string, List<IFeature>> searchFeatureDic = new SortedDictionary<string, List<IFeature>>();
+                foreach (SortedDictionary<string, object> geoDic in paramDicList)
                 {
                     List<IFeature> searchFeatureList = new List<IFeature>();
                     List<int> featureId = new List<int>();
@@ -386,13 +387,13 @@ namespace MultiRuleInOneSOE
 
                 string fieldValue = "";
 
-                Dictionary<string,Dictionary<string, double>> layerDikuaiDic = new Dictionary<string,Dictionary<string, double>>();
+                SortedDictionary<string, SortedDictionary<string, double>> layerDikuaiDic = new SortedDictionary<string, SortedDictionary<string, double>>();
 
                 //对检索到的所有空间要素与所有地块进行空间求交
                 foreach (string keyDikuaiName in searchFeatureDic.Keys )
                 {
                     //不同类型地类面积统计
-                    Dictionary<string, double> dileiDic = new Dictionary<string, double>();
+                    SortedDictionary<string, double> dileiDic = new SortedDictionary<string, double>();
                     
                     List<IFeature> featureList = null;
                     searchFeatureDic.TryGetValue(keyDikuaiName, out featureList);
@@ -496,9 +497,10 @@ namespace MultiRuleInOneSOE
             return Encoding.UTF8.GetBytes(result.ToJson());
         }
 
-        private IGeometry GeitDiKuaiGeo(string keyDikuaiName, List<Dictionary<string, object>> paramDicList)
+        private IGeometry GeitDiKuaiGeo(string keyDikuaiName, List<SortedDictionary<string, object>> paramDicList)
         {
-            foreach(Dictionary<string, object> paramDic in paramDicList){
+            foreach (SortedDictionary<string, object> paramDic in paramDicList)
+            {
                 object dikuaiName;
                 object dikuaiGeo;
 
@@ -1376,7 +1378,7 @@ namespace MultiRuleInOneSOE
                             }
                             else
                             {
-                                statisticObj.AddString("area", (areaTem / 667.0).ToString("0.00"));
+                                statisticObj.AddString("area",  (areaTem / 667.0).ToString("0.00"));
                             }
                             
                             statisticObj.AddLong("count", count1);
@@ -1492,7 +1494,14 @@ namespace MultiRuleInOneSOE
             jsonProInfos.TryGetObject("projectInfos", out pro_obj);
 
             proInfos = (object[])pro_obj;
-
+            bool isReturnGeometry = true;
+            if (null != proInfos)
+            {
+                JsonObject fsJson = (JsonObject)proInfos[0];
+                object isreturn;
+                fsJson.TryGetObject("returnGeometry", out isreturn);
+                isReturnGeometry = isreturn == null ? true : (bool)isreturn;
+            }
             //图层集合
             string[] layers = layersValue.ToString().Split(',');
             //字段集合(允许为空，不为空时要与图层数对应)
@@ -1767,8 +1776,11 @@ namespace MultiRuleInOneSOE
 
                                 }
                             }
-
-                            geosArray.Add(featureJson);
+                            if (isReturnGeometry)
+                            {
+                                geosArray.Add(featureJson);
+                            }
+                            
                         }
                         else if (pfeature.Shape.GeometryType == esriGeometryType.esriGeometryPoint)
                         {
@@ -1845,7 +1857,10 @@ namespace MultiRuleInOneSOE
                                 }
                             }
 
-                            geosArray.Add(featureJson);
+                            if (isReturnGeometry)
+                            {
+                                geosArray.Add(featureJson);
+                            }
                         }//end if
                     }
 
@@ -1888,7 +1903,7 @@ namespace MultiRuleInOneSOE
 
             }//endfor结束图层遍历
 
-            string wordName = CreateYZTHGJCWord2(proInfos, layers, picList, prjArea, areaDicList);
+            string wordName = CreateYZTHGJCWord(proInfos, layers, picList, prjArea, areaDicList);
 
             JsonObject fsJson1 = (JsonObject)proInfos[0];
             object obj_Area = null;
@@ -2157,7 +2172,7 @@ namespace MultiRuleInOneSOE
                 builder.MoveToMergeField("jsdw");
                 builder.Write(department);
                 builder.MoveToMergeField("ydfw");
-                builder.Write(Convert.ToDouble(Math.Round(area, 2).ToString("0.0")).ToString());
+                builder.Write((area * 0.0001).ToString("0.0000") + "/" + (area/666.7).ToString("0.00"));
                 builder.MoveToMergeField("date");
                 builder.Write(System.DateTime.Now.ToLongDateString());
                 /// <summary>
@@ -2200,15 +2215,19 @@ namespace MultiRuleInOneSOE
                     string tdlx = "";
                     //标识图层统计是否是第一条数据
                     bool keyCount = false;
-                    string unitName = "面积（亩）";
+                    string unitName = "面积(公顷/亩)";
                     string outputFormat = "0.00";
+                    string outputFormatGongQin = "0.0000";
                     double fenMu = 667;
+                    double gongqin = 0.0001;
                     bool isPoint = false;
                     if (Utils.layerTypeArray[i].ToLower().Contains("point"))
                     {
                         unitName = "个数";
                         outputFormat = "0";
+                        outputFormatGongQin = "0";
                         fenMu = 1;
+                        gongqin = 1;
                         isPoint = true;
                     }
                     //默认审查结果填写内容
@@ -2261,12 +2280,12 @@ namespace MultiRuleInOneSOE
 
                                 tb.Rows.Add(rowNum, layerName, " ", type, unitName, isPoint ? "包含" : "占用");
                                 rowText++;
-                                tb.Rows.Add("", "", "", tdlx, (areaValue / fenMu).ToString(outputFormat), "");
+                                tb.Rows.Add("", "", "", tdlx, (areaValue *gongqin).ToString(outputFormatGongQin)+"/"+(areaValue / fenMu).ToString(outputFormat), "");
                                 rowText++;
                             }
                             else
                             {
-                                tb.Rows.Add("", "", "", tdlx, (areaValue / fenMu).ToString(outputFormat), "");
+                                tb.Rows.Add("", "", "", tdlx, (areaValue * gongqin).ToString(outputFormatGongQin) + "/" + (areaValue / fenMu).ToString(outputFormat), "");
                                 rowText++;
                             }
                             keyCount = true;
@@ -2325,7 +2344,7 @@ namespace MultiRuleInOneSOE
         }
 
         /// <summary>
-        /// 创建一张图合规检测文档（20210324）第三版
+        /// 创建一张图合规检测文档（20210324）第三版 未使用
         /// </summary>
         /// <param name="proInfo"></param>
         /// <param name="layers"></param>
